@@ -11,6 +11,10 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('dashboard');
+        return view('dashboard', [
+            'totalItems' => \App\Models\Item::count(),
+            'totalStock' => \App\Models\Item::sum('stok'),
+            'totalRusak' => \App\Models\Item::where('kondisi', 'rusak')->count(),
+        ]);
     }
 }
