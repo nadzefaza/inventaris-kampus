@@ -14,15 +14,16 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
+    <body class="font-sans text-slate-900 antialiased">
+        <div class="flex min-h-screen flex-col items-center justify-center bg-slate-900 px-4 py-10">
+            <a href="/" class="flex flex-col items-center gap-3">
+                <span class="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-600 text-white">
+                    <x-icon name="archive" class="h-8 w-8" />
+                </span>
+                <span class="text-lg font-semibold text-white">SIM Inventaris Kampus</span>
+            </a>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <div class="mt-6 w-full max-w-md rounded-xl bg-white px-6 py-6 shadow-xl">
                 {{ $slot }}
             </div>
         </div>
