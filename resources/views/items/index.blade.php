@@ -1,35 +1,76 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Items') }}
-        </h2>
+        <h2 class="font-semibold text-xl text-gray-800">Daftar Inventaris Barang</h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <a href="{{ route('items.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">Add New Item</a>
-                    <table class="min-w-full bg-white border border-gray-300">
-                        <thead>
+            <div class="bg-white shadow-sm sm:rounded-lg p-6">
+
+                <div class="flex flex-wrap justify-between gap-3 mb-4">
+                    <form method="GET" class="flex flex-wrap gap-2">
+                        <select name="kategori" class="border-gray-300 rounded-md text-sm">
+                            <option value="">Semua Kategori</option>
+                            @foreach ($categories  as $k)
+                                <option value="{{ $k }}" @selected(request('kategori') == $k)>{{ $k }}</option>
+                            @endforeach
+                        </select>
+                        <select name="kondisi" class="border-gray-300 rounded-md text-sm">
+                            <option value="">Semua Kondisi</option>
+                            <option value="baik" @selected(request('kondisi') == 'baik')>Baik</option>
+                            <option value="rusak" @selected(request('kondisi') == 'rusak')>Rusak</option>
+                        </select>
+                        <input type="text" name="search" value="{{ request('search') }}"
+                               placeholder="Cari kode/nama..." class="border-gray-300 rounded-md text-sm">
+                        <button class="bg-gray-700 text-white px-4 py-2 rounded-md text-sm">Cari</button>
+                    </form>
+
+                    <a href="{{ route('items.create') }}"
+                       class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm">+ Tambah Barang Baru</a>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm text-left">
+                        <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                             <tr>
-                                <th class="py-2 px-4 border-b">ID</th>
-                                <th class="py-2 px-4 border-b">Name</th>
-                                <th class="py-2 px-4 border-b">Description</th>
-                                <th class="py-2 px-4 border-b">Quantity</th>
-                                <th class="py-2 px-4 border-b">Actions</th>
+                                <th class="px-4 py-3">Kode</th>
+                                <th class="px-4 py-3">Nama Barang</th>
+                                <th class="px-4 py-3">Kategori</th>
+                                <th class="px-4 py-3">Stok</th>
+                                <th class="px-4 py-3">Kondisi</th>
+                                <th class="px-4 py-3">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($items as $item)
-                                <tr>
-                                    <td class="py-2 px-4 border-b">{{ $item->id }}</td>
-                                    <td class="py-2 px-4 border-b">{{ $item->name }}</td>
-                                    <td class="py-2 px-4 border-b">{{ $item->description }}</td>
-                                    <td class="py-2 px-4 border-b">{{ $item->quantity }}</td>
-                                    <td class="py-2 px-4 border-b">
-                                        <a href="{{ route('items.edit', $item->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded">Edit</a>
-                                        <form action="{{ route('items.destroy', $item->id) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" onclick="return confirm('Are you sure?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1
+                            @forelse ($items as $item)
+                                <tr class="border-b">
+                                    <td class="px-4 py-3">{{ $item->kode_barang }}</td>
+                                    <td class="px-4 py-3">{{ $item->nama_barang }}</td>
+                                    <td class="px-4 py-3">{{ $item->kategori }}</td>
+                                    <td class="px-4 py-3">{{ $item->stok }}</td>
+                                    <td class="px-4 py-3">
+                                        <span class="px-2 py-1 rounded text-xs {{ $item->kondisi == 'baik' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                            {{ ucfirst($item->kondisi) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 flex gap-2">
+                                        <a href="{{ route('items.edit', $item) }}" class="text-blue-600">Edit</a>
+                                        <form action="{{ route('items.destroy', $item) }}" method="POST"
+                                              onsubmit="return confirm('Hapus barang ini?')">
+                                            @csrf @method('DELETE')
+                                            <button class="text-red-600">Hapus</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="6" class="px-4 py-6 text-center text-gray-500">Belum ada data.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4">{{ $items->links() }}</div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

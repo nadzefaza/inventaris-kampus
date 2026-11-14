@@ -10,6 +10,11 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // route lain (items, users, profile) tetap di sini
+});
+
 Route::middleware(['auth', 'role:admin,staff'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('items', ItemController::class);
