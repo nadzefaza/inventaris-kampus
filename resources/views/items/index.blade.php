@@ -11,7 +11,7 @@
                     <form method="GET" class="flex flex-wrap gap-2">
                         <select name="kategori" class="border-gray-300 rounded-md text-sm">
                             <option value="">Semua Kategori</option>
-                            @foreach ($categories  as $k)
+                            @foreach ($categories as $k)
                                 <option value="{{ $k }}" @selected(request('kategori') == $k)>{{ $k }}</option>
                             @endforeach
                         </select>

@@ -14,10 +14,12 @@ class ItemController extends Controller
     {
         $items = Item::query()
             ->when(request('search'), function ($query, $search) {
-                $query->where('kode_barang', 'like', "%{$search}%")
-                    ->orWhere('nama_barang', 'like', "%{$search}%")
-                    ->orWhere('kategori', 'like', "%{$search}%");
-            })
+             $query->where(function ($q) use ($search) {
+         $q->where('kode_barang', 'like', "%{$search}%")
+            ->orWhere('nama_barang', 'like', "%{$search}%")
+            ->orWhere('kategori', 'like', "%{$search}%");
+        });
+})
             ->when(request('kategori'), function ($query, $kategori) {
                 $query->where('kategori', $kategori);
             })
